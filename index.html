@@ -89,6 +89,7 @@ function betterToFixed(value, precision) {
     indexDotResultRounded = resultRounded.length;
     indexMoveDotToLeft = indexDotResultRounded - precision;
    }
+
    /** Case 4 */
    if (indexMoveDotToLeft < 1) {
      var addZerosBefore = new Array();
@@ -116,15 +117,15 @@ function betterToFixed(value, precision) {
 }
 
 tests({
-  'If no precision return value as string': function () {
+  'Should return value as string if no precision specified': function () {
     eq(betterToFixed(1), "1");
   },
 
-  'If no decimal point and precision is specified, return the value with 0s after decimal point as much as precision': function () {
+  'Should return the value with 0s after decimal point as much as precision, if no decimal point and precision is specified': function () {
     eq(betterToFixed(1,2), "1.00");
   },
 
-  'If precision > lengthAfterDot add 0s to the end as long as precision > lengthAfterDot': function () {
+  'Should add 0s to the end as long as precision > lengthAfterDot if precision > lengthAfterDot ': function () {
     eq(betterToFixed(1.126,4), "1.1260");
   },
 
@@ -140,7 +141,7 @@ tests({
     eq(betterToFixed(1.005,2), "1.01");
   },
 
-  'Should pass, when precision is equal to decimal points': function() {
+  'Should pass when precision is equal to decimal points': function() {
     eq(betterToFixed(0.0615,4), "0.0615");
   },
 
@@ -148,11 +149,8 @@ tests({
     eq(betterToFixed(0.0615,6), "0.061500");
   },
 
-  'Should round corectly if there are more than one zeros after the dot': function() {
+  'Should round corectly if there are more than one zeros after the dot': function() {    
     eq(betterToFixed(10.00265,3), "10.003");
-  },
-
-  'Should round corectly if there are more than one zeros after the dot': function() {
     eq(betterToFixed(10.00244,3), "10.002");
   }
 
