@@ -2,27 +2,35 @@
 
 <script>
 /**
- * Description : Using string manipulation, we create a new string that moves
-  the decimal point precision times to the right. Then it will round the value
-  if necessary  and return a new string, which will then move the decimal point
-  back precision times to the left.
- *
- *                |Step 1|           |Step 2 |                    |Step 3|
- * i.e : "10.235" |  ->  | "1023.5"  |  ->   |  Math.round(1024)  |  ->  | "10.24"
- *
- * Cases:
- * Usual Case: Has 3 steps as exemplified above.
- * Exception Cases:
-   * Case 1: If there is no precision, just return value as a string.
-   * Case 2: If no decimal point is specified inside the value and if precision is specified,
-     return 0s to the end of the string precision times.
-   * Case 3: If precision > lengthElemAfterDot, return 0s to the end of the string as long as
-    the difference between the two.
-   * Case 4: If the index of the dot which moved back to the left is less than 1,
-     will add back the zeros that Math.round took from the value.
- */
+  * Syntax: betterToFixed(value[, precision]);
 
-function toFixed(value, precision) {
+  * Parameters:
+     value: a number, which has a decimal point or not.
+     precision: the number of decimals after the decimal point.
+
+  * Return value:
+      A string representing the given number using fixed-point notation.
+
+  * Description : Using string manipulation, we create a new string that moves
+    the decimal point precision times to the right. Then it will round the value
+    if necessary  and return a new string, which will then move the decimal point
+    back precision times to the left.
+                    |Step 1|           |Step 2 |                    |Step 3|
+   * i.e : "10.235" |  ->  | "1023.5"  |  ->   |  Math.round(1024)  |  ->  | "10.24"
+
+   * Cases:
+   * Usual Case: Has 3 steps as exemplified above.
+   * Exception Cases:
+     * Case 1: If there is no precision, just return value as a string.
+     * Case 2: If no decimal point is specified inside the value and if precision is specified,
+       return 0s to the end of the string precision times.
+     * Case 3: If precision > lengthElemAfterDot, return 0s to the end of the string as long as
+      the difference between the two.
+     * Case 4: If the index of the dot which moved back to the left is less than 1,
+       will add back the zeros that Math.round took from the value.
+   */
+
+function betterToFixed(value, precision) {
   /** Case 1 */
   if (!precision) {
     return value.toString();
@@ -109,43 +117,43 @@ function toFixed(value, precision) {
 
 tests({
   'If no precision return value as string': function () {
-    eq(toFixed(1), "1");
+    eq(betterToFixed(1), "1");
   },
 
   'If no decimal point and precision is specified, return the value with 0s after decimal point as much as precision': function () {
-    eq(toFixed(1,2), "1.00");
+    eq(betterToFixed(1,2), "1.00");
   },
 
   'If precision > lengthAfterDot add 0s to the end as long as precision > lengthAfterDot': function () {
-    eq(toFixed(1.126,4), "1.1260");
+    eq(betterToFixed(1.126,4), "1.1260");
   },
 
   'Should pass for 10.235': function () {
-    eq(toFixed(10.235,2), "10.24");
+    eq(betterToFixed(10.235,2), "10.24");
   },
 
   'Should pass for 0.615': function () {
-    eq(toFixed(0.615,2), "0.62");
+    eq(betterToFixed(0.615,2), "0.62");
   },
 
   'Should pass for 1.005': function () {
-    eq(toFixed(1.005,2), "1.01");
+    eq(betterToFixed(1.005,2), "1.01");
   },
 
   'Should pass, when precision is equal to decimal points': function() {
-    eq(toFixed(0.0615,4), "0.0615");
+    eq(betterToFixed(0.0615,4), "0.0615");
   },
 
   'Should pass when precision is more than decimal points': function() {
-    eq(toFixed(0.0615,6), "0.061500");
+    eq(betterToFixed(0.0615,6), "0.061500");
   },
 
   'Should round corectly if there are more than one zeros after the dot': function() {
-    eq(toFixed(10.00265,3), "10.003");
+    eq(betterToFixed(10.00265,3), "10.003");
   },
 
   'Should round corectly if there are more than one zeros after the dot': function() {
-    eq(toFixed(10.00244,3), "10.002");
+    eq(betterToFixed(10.00244,3), "10.002");
   }
 
 });
