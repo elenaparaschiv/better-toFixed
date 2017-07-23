@@ -1,6 +1,6 @@
 # betterToFixed()
 
-An attempt to  <a href = "https://github.com/gordonmzhu/beasts/issues/7" > challange 6 </a>
+An attempt to  <a href = "https://github.com/gordonmzhu/beasts/issues/7" > challange 6 #Beasts Watch and Code </a>
 
 My goal in this challange is to create a better version of the Number.prototype.toFixed(), which will call betterToFixed().
 Its purpose is to make nubmers like 0.615, 10.235, and 1.005, which with a normal toFixed() would not be rounded corectly to
