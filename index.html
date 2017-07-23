@@ -1,0 +1,153 @@
+<script src="tinytest.js"></script>
+
+<script>
+/**
+ * Description : Using string manipulation, we create a new string that moves
+  the decimal point precision times to the right. Then it will round the value
+  if necessary  and return a new string, which will then move the decimal point
+  back precision times to the left.
+ *
+ *                |Step 1|           |Step 2 |                    |Step 3|
+ * i.e : "10.235" |  ->  | "1023.5"  |  ->   |  Math.round(1024)  |  ->  | "10.24"
+ *
+ * Cases:
+ * Usual Case: Has 3 steps as exemplified above.
+ * Exception Cases:
+   * Case 1: If there is no precision, just return value as a string.
+   * Case 2: If no decimal point is specified inside the value and if precision is specified,
+     return 0s to the end of the string precision times.
+   * Case 3: If precision > lengthElemAfterDot, return 0s to the end of the string as long as
+    the difference between the two.
+   * Case 4: If the index of the dot which moved back to the left is less than 1,
+     will add back the zeros that Math.round took from the value.
+ */
+
+function toFixed(value, precision) {
+  /** Case 1 */
+  if (!precision) {
+    return value.toString();
+  }
+  /** [end] Case 1 */
+
+  var valueString = value.toString();
+  var indexInitialDot = valueString.indexOf(".");
+  var initialDot = valueString[indexInitialDot];
+  var elementBeforeDot = valueString.substr(0, indexInitialDot);
+  var elementAfterDot = valueString.substr(indexInitialDot + 1);
+  var elementPrecisionToRight = valueString.substr(indexInitialDot + 1, precision);
+  var elementAfterPrecisionToRight = valueString.substr(indexInitialDot + precision + 1);
+  var lengthElementAfterDot = elementAfterDot.length;
+
+  var result;
+  var resultRounded;
+  var indexDotResultRounded;
+  var indexMoveDotToLeft;
+  var finalResult;
+
+  /** Case 2 */
+   if (!initialDot && precision) {
+     var addZerosToEnd = new Array();
+     var i;
+     for (i = 0 ; i < precision; i++) {
+       addZerosToEnd.push('0');
+     }
+     finalResult = value + '.' + addZerosToEnd.join("");
+     return finalResult;
+   }
+  /** [end] Case 2 */
+
+  /** Case 3 */
+    if (lengthElementAfterDot < precision) {
+      var addZerosToEnd = new Array();
+      while (lengthElementAfterDot < precision) {
+        addZerosToEnd.push("0");
+        lengthElementAfterDot++;
+      }
+      addZerosToEnd =  addZerosToEnd.join("");
+      finalResult = elementBeforeDot + "." + elementAfterDot + addZerosToEnd;
+      return finalResult;
+  /** [end] Case 3 */
+
+  /** Usual case: Step 1 */
+    } else {
+      result = elementBeforeDot + elementPrecisionToRight + "." + elementAfterPrecisionToRight;
+    }
+
+  /**  Usual case: Step 2  */
+   resultRounded = Math.round(result).toString();
+   getDotResultRounded = resultRounded.indexOf(".");
+
+   if (getDotResultRounded === -1) {
+    indexDotResultRounded = resultRounded.length;
+    indexMoveDotToLeft = indexDotResultRounded - precision;
+   }
+   /** Case 4 */
+   if (indexMoveDotToLeft < 1) {
+     var addZerosBefore = new Array();
+     var indexDotResultWithZerosBefore;
+     while (indexMoveDotToLeft < 1) {
+       addZerosBefore.push("0");
+       indexMoveDotToLeft++;
+     }
+     addZerosBefore = addZerosBefore.join("");
+     result = addZerosBefore + resultRounded;
+     indexDotResultWithZerosBefore = result.length - precision;
+     elementAfterDot = result.substr(indexDotResultWithZerosBefore, precision);
+
+     finalResult = addZerosBefore.substr(0,1) + "." + elementAfterDot;
+     return finalResult;
+   /** [end] Case 4*/
+
+   } else {
+  /** Usual case: Step 3 */
+     elementAfterDot = resultRounded.substr(indexMoveDotToLeft, precision);
+     finalResult = elementBeforeDot + "." + elementAfterDot;
+     return finalResult;
+   }
+  /** [end] Usual Case */
+}
+
+tests({
+  'If no precision return value as string': function () {
+    eq(toFixed(1), "1");
+  },
+
+  'If no decimal point and precision is specified, return the value with 0s after decimal point as much as precision': function () {
+    eq(toFixed(1,2), "1.00");
+  },
+
+  'If precision > lengthAfterDot add 0s to the end as long as precision > lengthAfterDot': function () {
+    eq(toFixed(1.126,4), "1.1260");
+  },
+
+  'Should pass for 10.235': function () {
+    eq(toFixed(10.235,2), "10.24");
+  },
+
+  'Should pass for 0.615': function () {
+    eq(toFixed(0.615,2), "0.62");
+  },
+
+  'Should pass for 1.005': function () {
+    eq(toFixed(1.005,2), "1.01");
+  },
+
+  'Should pass, when precision is equal to decimal points': function() {
+    eq(toFixed(0.0615,4), "0.0615");
+  },
+
+  'Should pass when precision is more than decimal points': function() {
+    eq(toFixed(0.0615,6), "0.061500");
+  },
+
+  'Should round corectly if there are more than one zeros after the dot': function() {
+    eq(toFixed(10.00265,3), "10.003");
+  },
+
+  'Should round corectly if there are more than one zeros after the dot': function() {
+    eq(toFixed(10.00244,3), "10.002");
+  }
+
+});
+</script>
+</script>
