@@ -1,3 +1,5 @@
+# betterToFixed()
+
 An attempt to  <a href = "https://github.com/gordonmzhu/beasts/issues/7" > challange 6 </a>
 
 My goal in this challange is to create a better version of the Number.prototype.toFixed(), which will call betterToFixed().
